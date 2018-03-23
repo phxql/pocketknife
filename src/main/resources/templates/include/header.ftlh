@@ -30,7 +30,7 @@
                         Encoding
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/base64">Base64</a>
+                        <a class="dropdown-item" href="/encoding/base64">Base64</a>
                     </div>
                 </li>
             </ul>
