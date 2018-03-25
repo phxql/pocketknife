@@ -13,41 +13,50 @@ import org.springframework.web.servlet.ModelAndView
 @Controller
 @RequestMapping("/json/prettifier")
 class JsonPrettifier {
+    private val viewName = "json/prettifier"
+    private val modelName = "model"
+
     @GetMapping
     fun index(): ModelAndView {
-        return ModelAndView("json/prettifier", mapOf(
-                "model" to Model("", "", null)
+        return ModelAndView(viewName, mapOf(
+                modelName to Model("", "", null)
         ))
     }
 
     @PostMapping("/prettify")
     fun decode(@ModelAttribute("form") form: PrettifyForm): ModelAndView {
         val (pretty, error) = try {
-            val mapper = ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
-            val pretty = mapper.writeValueAsString(mapper.readTree(form.ugly))
-            Pair(pretty, null)
+            Pair(prettifyJson(form.ugly), null)
         } catch (e: JsonProcessingException) {
             Pair("", e.message)
         }
 
-        return ModelAndView("json/prettifier", mapOf(
-                "model" to Model(form.ugly, pretty, error)
+        return ModelAndView(viewName, mapOf(
+                modelName to Model(form.ugly, pretty, error)
         ))
     }
 
     @PostMapping("/minify")
     fun decode(@ModelAttribute("form") form: MinifyForm): ModelAndView {
         val (ugly, error) = try {
-            val mapper = ObjectMapper().disable(SerializationFeature.INDENT_OUTPUT)
-            val ugly = mapper.writeValueAsString(mapper.readTree(form.pretty))
-            Pair(ugly, null)
+            Pair(minifyJson(form.pretty), null)
         } catch (e: JsonProcessingException) {
             Pair("", e.message)
         }
 
-        return ModelAndView("json/prettifier", mapOf(
-                "model" to Model(ugly, form.pretty, error)
+        return ModelAndView(viewName, mapOf(
+                modelName to Model(ugly, form.pretty, error)
         ))
+    }
+
+    private fun minifyJson(json: String): String {
+        val mapper = ObjectMapper().disable(SerializationFeature.INDENT_OUTPUT)
+        return mapper.writeValueAsString(mapper.readTree(json))
+    }
+
+    private fun prettifyJson(json: String): String {
+        val mapper = ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
+        return mapper.writeValueAsString(mapper.readTree(json))
     }
 
     data class PrettifyForm(val ugly: String)
