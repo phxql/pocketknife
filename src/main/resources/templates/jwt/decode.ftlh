@@ -26,4 +26,31 @@
     </div>
 </form>
 
+<p>Parsed payload:</p>
+
+<table class="table table-sm table-hover">
+    <tbody>
+    <#if model.exp??>
+<tr>
+    <td>Expiration (exp)</td>
+    <td>${model.exp}</td>
+</tr>
+    </#if>
+
+<#if model.nbf??>
+<tr>
+    <td>Not before (nbf)</td>
+    <td>${model.nbf}</td>
+</tr>
+</#if>
+
+<#if model.iat??>
+<tr>
+    <td>Issued at (iat)</td>
+    <td>${model.iat}</td>
+</tr>
+</#if>
+    </tbody>
+</table>
+
 <#include '../include/footer.ftlh'>
