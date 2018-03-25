@@ -10,6 +10,12 @@ There are several websites dedicated to the tasks contained in Pocketknife. If y
 should be hesitant to paste that data into 3rd party websites. With Pocketknife, you just run the server on your local
 machine, open the browser and can work with any data you want.
 
+## Features
+
+* Base64 encoding / decoding
+* JSON prettify / minify
+* JWT decoding
+
 ## License
 
 Licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). 
