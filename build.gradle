@@ -25,6 +25,11 @@ sourceCompatibility = 1.8
 mainClassName = "de.mkammerer.pocketknife.pocketknife.PocketknifeApplicationKt"
 applicationDefaultJvmArgs = ["-XX:+UseSerialGC", "-XX:MaxHeapFreeRatio=10", "-XX:MinHeapFreeRatio=10", "-Xms32M", "-Xmx128M", "-Dfile.encoding=UTF-8"]
 
+// See https://github.com/spring-projects/spring-boot/issues/12631
+bootStartScripts {
+    defaultJvmOpts = project.applicationDefaultJvmArgs
+}
+
 compileKotlin {
     kotlinOptions {
         freeCompilerArgs = ["-Xjsr305=strict"]
