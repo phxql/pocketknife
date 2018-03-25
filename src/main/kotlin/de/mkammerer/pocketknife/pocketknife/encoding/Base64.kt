@@ -12,12 +12,12 @@ import java.util.Base64
 @RequestMapping("/encoding/base64")
 class Base64 {
     private val viewName = "encoding/base64"
-    private val model = "model"
+    private val modelName = "model"
 
     @GetMapping
     fun index(): ModelAndView {
         return ModelAndView(viewName, mapOf(
-                model to Model("", "", null)
+                modelName to Model("", "", null)
         ))
     }
 
@@ -30,7 +30,7 @@ class Base64 {
         }
 
         return ModelAndView(viewName, mapOf(
-                model to Model(form.base64, plaintext, error)
+                modelName to Model(form.base64, plaintext, error)
         ))
     }
 
@@ -39,7 +39,7 @@ class Base64 {
         val base64 = encodeBase64(form.plaintext)
 
         return ModelAndView(viewName, mapOf(
-                model to Model(base64, form.plaintext, null)
+                modelName to Model(base64, form.plaintext, null)
         ))
     }
 

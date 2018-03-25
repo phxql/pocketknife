@@ -14,10 +14,13 @@ import java.util.*
 @Controller
 @RequestMapping("/jwt/decode")
 class JwtDecode {
+    private val viewName = "jwt/decode"
+    private val modelName = "model"
+
     @GetMapping
     fun index(): ModelAndView {
-        return ModelAndView("jwt/decode", mapOf(
-                "model" to Model("", "", "", null)
+        return ModelAndView(viewName, mapOf(
+                modelName to Model("", "", "", null)
         ))
     }
 
@@ -30,8 +33,8 @@ class JwtDecode {
             Triple("", "", e.message)
         }
 
-        return ModelAndView("jwt/decode", mapOf(
-                "model" to Model(form.jwt, header, payload, error)
+        return ModelAndView(viewName, mapOf(
+                modelName to Model(form.jwt, header, payload, error)
         ))
     }
 
