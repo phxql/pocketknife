@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="model" type="de.mkammerer.pocketknife.pocketknife.encoding.Base64.Model" -->
+<#-- @ftlvariable name="model" type="de.mkammerer.pocketknife.pocketknife.encoding.Base64Decoder.Model" -->
 <#include '../include/header.ftlh'>
 
 <h1>Base64 encoder / decoder</h1>

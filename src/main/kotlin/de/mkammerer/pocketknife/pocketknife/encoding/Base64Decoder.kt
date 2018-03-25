@@ -1,46 +1,36 @@
 package de.mkammerer.pocketknife.pocketknife.encoding
 
+import de.mkammerer.pocketknife.pocketknife.BaseController
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
-import java.util.Base64
+import java.util.*
 
 @Controller
 @RequestMapping("/encoding/base64")
-class Base64 {
-    private val viewName = "encoding/base64"
-    private val modelName = "model"
-
+class Base64Decoder : BaseController<Base64Decoder.Model>("encoding/base64") {
     @GetMapping
-    fun index(): ModelAndView {
-        return ModelAndView(viewName, mapOf(
-                modelName to Model("", "", null)
-        ))
-    }
+    fun index(): ModelAndView = view(Model.EMPTY)
 
     @PostMapping("/decode")
     fun decode(@ModelAttribute("form") form: DecodeForm): ModelAndView {
-        val (plaintext, error) = try {
-            Pair(decodeBase64(form.base64), null)
+        val model = try {
+            Model(form.base64, decodeBase64(form.base64), null)
         } catch (e: IllegalArgumentException) {
-            Pair("", e.message)
+            Model(form.base64, "", e.message)
         }
 
-        return ModelAndView(viewName, mapOf(
-                modelName to Model(form.base64, plaintext, error)
-        ))
+        return view(model)
     }
 
     @PostMapping("/encode")
     fun decode(@ModelAttribute("form") form: EncodeForm): ModelAndView {
         val base64 = encodeBase64(form.plaintext)
 
-        return ModelAndView(viewName, mapOf(
-                modelName to Model(base64, form.plaintext, null)
-        ))
+        return view(Model(base64, form.plaintext, null))
     }
 
     private fun encodeBase64(plaintext: String): String {
@@ -53,5 +43,9 @@ class Base64 {
 
     data class DecodeForm(val base64: String)
     data class EncodeForm(val plaintext: String)
-    data class Model(val base64: String, val plaintext: String, val error: String?)
+    data class Model(val base64: String, val plaintext: String, val error: String?) {
+        companion object {
+            val EMPTY = Model("", "", null)
+        }
+    }
 }

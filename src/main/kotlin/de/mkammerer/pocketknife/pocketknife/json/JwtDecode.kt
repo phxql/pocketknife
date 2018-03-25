@@ -3,6 +3,7 @@ package de.mkammerer.pocketknife.pocketknife.json
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import de.mkammerer.pocketknife.pocketknife.BaseController
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -13,29 +14,19 @@ import java.util.*
 
 @Controller
 @RequestMapping("/jwt/decode")
-class JwtDecode {
-    private val viewName = "jwt/decode"
-    private val modelName = "model"
+class JwtDecode : BaseController<JwtDecode.Model>("jwt/decode") {
 
     @GetMapping
-    fun index(): ModelAndView {
-        return ModelAndView(viewName, mapOf(
-                modelName to Model("", "", "", null)
-        ))
-    }
+    fun index(): ModelAndView = view(Model.EMPTY)
 
     @PostMapping("/decode")
     fun decode(@ModelAttribute("form") form: DecodeForm): ModelAndView {
-        val (header, payload, error) = try {
-            val token = decodeToken(form.jwt)
-            Triple(token.header, token.payload, null)
+        val model = try {
+            Model.fromToken(form.jwt, decodeToken(form.jwt))
         } catch (e: IllegalArgumentException) {
-            Triple("", "", e.message)
+            Model.fromException(form.jwt, e)
         }
-
-        return ModelAndView(viewName, mapOf(
-                modelName to Model(form.jwt, header, payload, error)
-        ))
+        return view(model)
     }
 
     private fun decodeToken(jwt: String): Token {
@@ -60,5 +51,13 @@ class JwtDecode {
     data class Token(val header: String, val payload: String)
 
     data class DecodeForm(val jwt: String)
-    data class Model(val jwt: String, val header: String, val payload: String, val error: String?)
+    data class Model(val jwt: String, val header: String, val payload: String, val error: String?) {
+        companion object {
+            val EMPTY = Model("", "", "", null)
+
+            fun fromToken(jwt: String, token: Token) = Model(jwt, token.header, token.payload, null)
+
+            fun fromException(jwt: String, exception: Exception) = Model(jwt, "", "", exception.message)
+        }
+    }
 }
