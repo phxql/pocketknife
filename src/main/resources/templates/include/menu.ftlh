@@ -15,5 +15,6 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="/json/prettifier">Prettify / Minify</a>
+        <a class="dropdown-item" href="/jwt/decode">JWT Decoding</a>
     </div>
 </li>
