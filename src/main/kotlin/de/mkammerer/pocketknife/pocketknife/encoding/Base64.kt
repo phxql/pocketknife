@@ -11,9 +11,11 @@ import java.util.Base64
 @Controller
 @RequestMapping("/encoding/base64")
 class Base64 {
+    private val viewName = "encoding/base64"
+
     @GetMapping
     fun index(): ModelAndView {
-        return ModelAndView("encoding/base64", mapOf(
+        return ModelAndView(viewName, mapOf(
                 "model" to Model("", "", null)
         ))
     }
@@ -21,23 +23,31 @@ class Base64 {
     @PostMapping("/decode")
     fun decode(@ModelAttribute("form") form: DecodeForm): ModelAndView {
         val (plaintext, error) = try {
-            Pair(String(Base64.getDecoder().decode(form.base64), charset = Charsets.UTF_8), null)
+            Pair(decodeBase64(form.base64), null)
         } catch (e: IllegalArgumentException) {
             Pair("", e.message)
         }
 
-        return ModelAndView("encoding/base64", mapOf(
+        return ModelAndView(viewName, mapOf(
                 "model" to Model(form.base64, plaintext, error)
         ))
     }
 
     @PostMapping("/encode")
     fun decode(@ModelAttribute("form") form: EncodeForm): ModelAndView {
-        val base64 = Base64.getEncoder().encodeToString(form.plaintext.toByteArray())
+        val base64 = encodeBase64(form.plaintext)
 
-        return ModelAndView("encoding/base64", mapOf(
+        return ModelAndView(viewName, mapOf(
                 "model" to Model(base64, form.plaintext, null)
         ))
+    }
+
+    private fun encodeBase64(plaintext: String): String {
+        return Base64.getEncoder().encodeToString(plaintext.toByteArray())
+    }
+
+    private fun decodeBase64(base64: String): String {
+        return String(Base64.getDecoder().decode(base64), charset = Charsets.UTF_8)
     }
 
     data class DecodeForm(val base64: String)
