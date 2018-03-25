@@ -7,6 +7,7 @@
     <title>Pocketknife</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/pocketknife.css">
 
     <title>Pocketknife</title>
 </head>
@@ -23,16 +24,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Encoding
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/encoding/base64">Base64</a>
-                    </div>
-                </li>
+                <#include 'menu.ftlh'>
             </ul>
         </div>
     </nav>
